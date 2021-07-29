@@ -8,7 +8,7 @@
 
 
 import struct
-import time
+import datetime
 import collections
 import copy
 
@@ -76,9 +76,11 @@ class Label_TypeUTimeStamp(LabelBase):
 
 	def Build(self, klvdata):
 		s = klvdata.rawdata.decode('utf-8', errors='replace')
+
 		# 'yymmddhhmmss.sss'
 		fmt = '%y%m%d%H%M%S.%f'
-		return time.strptime(s, fmt)
+		t = datetime.datetime.strptime(s, fmt)
+		return t
 
 class LabelDVID(LabelBase):
 	def __init__(self):

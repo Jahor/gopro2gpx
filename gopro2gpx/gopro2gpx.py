@@ -18,7 +18,7 @@ import subprocess
 import sys
 import time
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .config import setup_environment
 from . import fourCC
@@ -63,7 +63,7 @@ def BuildGPSPoints(data, skip=False):
         elif d.fourCC == 'GPS5':
             # we have to use the REPEAT value.
 
-            for item in d.data:
+            for itemi, item in enumerate(d.data):
 
                 if item.lon == item.lat == item.alt == 0:
                     print("Warning: Skipping empty point")
@@ -81,7 +81,7 @@ def BuildGPSPoints(data, skip=False):
                 
 
                 gpsdata = fourCC.GPSData._make(retdata)
-                p = gpshelper.GPSPoint(gpsdata.lat, gpsdata.lon, gpsdata.alt, datetime.fromtimestamp(time.mktime(GPSU)), gpsdata.speed)
+                p = gpshelper.GPSPoint(gpsdata.lat, gpsdata.lon, gpsdata.alt, GPSU + timedelta(seconds=itemi * 1./len(d.data)), gpsdata.speed)
                 points.append(p)
                 stats['ok'] += 1
 
