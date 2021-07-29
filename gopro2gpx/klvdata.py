@@ -31,7 +31,7 @@ class KLVData:
         # read now the data, in raw format
         self.rawdata = self.readRawData(data, offset)
         # process the label, if found
-        self.data = fourCC.Manage(self)
+        self.data = fourCC.Manage(self) if self.repeat > 0 else None
 
 
     def __str__(self):
@@ -59,7 +59,7 @@ class KLVData:
         return i
 
     def skip(self):
-        return self.fourCC in fourCC.skip_labels
+        return self.repeat == 0 or self.fourCC in fourCC.skip_labels
 
 
     def readRawData(self, data, offset):
